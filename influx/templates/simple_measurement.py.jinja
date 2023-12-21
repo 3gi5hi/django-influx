@@ -1,0 +1,17 @@
+from influx.measurement import Measurement
+
+class AnonymousMeasurement(Measurement):
+    import influx
+    measurement_name = '{{ measurement_name }}'
+    database = '{{ database }}'
+
+{% if precision is not none %}
+    time = influx.attributes.TimestampFieldAttribute(precision='{{ precision }}')
+{% endif %}
+
+{% for tag_variable, tag_name in tag_names.items() %}
+    {{ tag_variable }} = influx.attributes.TagFieldAttribute(attribute_name='{{ tag_name }}')
+{% endfor %}
+{% for field_variable, field_name in field_names.items() %}
+    {{ field_variable }} = influx.attributes.GenericFieldAttribute(attribute_name='{{ field_name }}')
+{% endfor %}
